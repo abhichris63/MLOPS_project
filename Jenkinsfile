@@ -30,15 +30,7 @@ pipeline {
                 }
             }
         }
-    // stage('Debug'){
-    //     steps{
-    //         sh '''
-    //         pwd
-    //         ls -la
-    //         find . -maxdepth 2 -name ".dvc"
-    //         '''
-    //     }
-    // }
+
         stage('DVC Pull'){
             steps{
                 withCredentials([file(credentialsId:'gcp-key', variable:'GOOGLE_APPLICATION_CREDENTIALS')]){
