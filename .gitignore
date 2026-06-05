@@ -156,10 +156,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-<<<<<<< HEAD
-# .artifacts/
-=======
->>>>>>> 89f1d06da3e8e363d1ac3413544773d4a5925123
 
 # Spyder project settings
 .spyderproject
@@ -208,7 +204,6 @@ cython_debug/
 CC_MLOPS_PROJECT_1.egg-info/
 LOGS/
 mlruns/
-artifacts/
 =======
 # .vscode/
 >>>>>>> 89f1d06da3e8e363d1ac3413544773d4a5925123
