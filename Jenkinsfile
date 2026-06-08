@@ -3,6 +3,9 @@ pipeline {
 
     environment {
         VENV_DIR = 'venv'
+        GCP_PROJECT = 'storage-cc-data'
+        GCLOUD_PATH = "/var/jenkins_home/google-cloud-sdk/bin"
+        KUBERCTL_AUTH_PLUGIN = "/usr/lib/google-cloud.sdk"
     }
 
     stages{
@@ -44,5 +47,42 @@ pipeline {
                 }
             }
         }
+
+
+        stage('Building and Pushing Image to GCP'){
+            steps{
+                withCredentials([file(credentialsId:'gcp-key', variable:'GOOGLE_APPLICATION_CREDENTIALS')]){
+                    script{
+                        echo 'Building and Pushing Image to GCP...'
+                        sh '''
+                        export PATH=$PATH:${GCLOUD_PATH}
+                        gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
+                        gcloud config set project ${GCP_PROJECT}
+                        gcloud auth configure-docker --quiet
+                        docker build -t gcr.io/${GCP_PROJECT}/ml-project:latest .
+                        docker push gcr.io/${GCP_PROJECT}/ml-project:latest
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Deployment to Kubernates'){
+            steps{
+                withCredentials([file(credentialsId:'gcp-key', variable:'GOOGLE_APPLICATION_CREDENTIALS')]){
+                    script{
+                        echo 'Deployment to Kubernates...'
+                        sh '''
+                        export PATH=$PATH:${GCLOUD_PATH}:${KUBERCTL_AUTH_PLUGIN}
+                        gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
+                        gcloud config set project ${GCP_PROJECT}
+                        gcloud container clusters get-credentials ml-app-cluster --region us-central1
+                        kubect1 apply -f deployment.yaml
+                        '''
+                    }
+                }
+            }
+        }
+
     }
 }
