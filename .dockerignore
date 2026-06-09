@@ -2,6 +2,5 @@ venv/
 .git/
 __pycache__/
 *.pyc
-artifacts/
 .mlruns/
 .dvc/cache/
