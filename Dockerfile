@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy the application code
-COPY ..
+COPY . .
 
 # Installing dependencies from requirements.txt
 RUN pip install --no-cache-dir -e .
