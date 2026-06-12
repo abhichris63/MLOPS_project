@@ -29,17 +29,18 @@
 # # Switch back to the Jenkins user
 # USER jenkins
 
-
 FROM jenkins/jenkins:lts
 
 USER root
 
-RUN apt-get update && \
-    apt-get install -y \
-    ca-certificates \
-    curl \
-    gnupg \
-    apt-transport-https
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-venv \
+    && rm -rf /var/lib/apt/lists/*
+
+USER jenkins
+
 
 # Docker Repository
 RUN install -m 0755 -d /etc/apt/keyrings && \
